@@ -1,48 +1,76 @@
 package main
 
 import (
-	"fmt"
+	"flag"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
+	"syscall"
 )
 
-const defaultAddr string = "127.0.0.1:8080"
+func handleSignals(signals chan os.Signal) {
+	signal := <-signals
+	log.Printf("SIGNAL RECIEVED: %s", signal)
+	os.Exit(1)
+}
 
-func formatPort(portStr string) string {
-	port, err := strconv.Atoi(portStr)
-	if err != nil || (port > 65535 || port < 1000) {
-		log.Printf("%s must be a valid port between 1000-65535", portStr)
-		log.Printf("Defaulting to: %s", defaultAddr)
-		return defaultAddr
+func serveHTTP(errs chan error, handler func(w http.ResponseWriter, r *http.Request)) {
+	log.Printf("Starting http webserver on port 8080\n")
+	if err := http.ListenAndServe(":8080", http.HandlerFunc(handler)); err != nil {
+		log.Fatal(err)
+		errs <- err
 	}
-	return fmt.Sprintf("127.0.0.1:%d", port)
+}
+
+func serveHTTPS(errs chan error, certFile string, keyFile string) {
+	log.Printf("Starting https webserver on port 8443\n")
+	if err := http.ListenAndServeTLS(":8443", certFile, keyFile, nil); err != nil {
+		log.Fatal(err)
+		errs <- err
+	}
+}
+
+func redirectTLS(w http.ResponseWriter, r *http.Request) {
+	host,_ := os.Hostname()
+	u := r.URL
+	u.Host = net.JoinHostPort(host, "443")
+	u.Scheme = "https"
+	http.Redirect(w, r, u.String(), http.StatusMovedPermanently)
+}
+
+func Run(certFile *string, keyFile *string) chan error {
+	errs := make(chan error)
+
+	http.Handle("/", http.FileServer(http.Dir("./static")))
+
+	if len(*certFile) > 0 && len(*keyFile) > 0 {
+		go serveHTTPS(errs, *certFile, *keyFile)
+		go serveHTTP(errs, redirectTLS)
+	} else {
+		go serveHTTP(errs, nil)
+	}
+
+	return errs
 }
 
 func main() {
-	listenAddr := defaultAddr
-
-	if len(os.Args) > 1 {
-		listenAddr = formatPort(os.Args[2])
-	}
-
-	log.Printf("Starting QtBot document server on port %s\n", listenAddr)
-
-	documentServer := http.FileServer(http.Dir("./static"))
-	http.Handle("/", documentServer)
-
 	signals := make(chan os.Signal, 1)
-	signal.Notify(signals)
+	signal.Notify(signals, syscall.SIGTERM, syscall.SIGINT)
 
-	go func() {
-		signal := <-signals
-		log.Printf("SIGNAL RECIEVED: %s", signal)
-		os.Exit(1)
-	}()
+	go handleSignals(signals)
 
-	if err := http.ListenAndServe(listenAddr, nil); err != nil {
-		log.Fatal(err)
+	certFile := flag.String("cert", "", "SSL Cert/Pem File")
+	keyFile := flag.String("key", "", "SSL Key/Pem File")
+	flag.Parse()
+
+	errs := Run(certFile, keyFile)
+
+	// This will run forever until channel receives error
+	select {
+	case err := <-errs:
+		log.Printf("Could not start serving service due to (error: %s)", err)
 	}
 }
+
