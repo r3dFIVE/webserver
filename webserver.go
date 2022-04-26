@@ -12,6 +12,7 @@ import (
 
 func handleSignals(signals chan os.Signal) {
 	signal := <-signals
+	// TODO: Handler graceful shutdown of http/https service!
 	log.Printf("SIGNAL RECIEVED: %s", signal)
 	os.Exit(1)
 }
@@ -33,7 +34,11 @@ func serveHTTPS(errs chan error, certFile string, keyFile string) {
 }
 
 func redirectTLS(w http.ResponseWriter, r *http.Request) {
-	host,_ := os.Hostname()
+	host, err := os.Hostname()
+	if err != nil {
+		log.Printf("Unable to force TLS redirect. Reason: Failed to get hostname, %s", err)
+		os.Exit(1)
+	}
 	u := r.URL
 	u.Host = net.JoinHostPort(host, "443")
 	u.Scheme = "https"
@@ -67,10 +72,8 @@ func main() {
 
 	errs := Run(certFile, keyFile)
 
-	// This will run forever until channel receives error
 	select {
 	case err := <-errs:
-		log.Printf("Could not start serving service due to (error: %s)", err)
+		log.Printf("Could not start webserver service due to error: %s", err)
 	}
 }
-
