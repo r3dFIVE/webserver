@@ -17,12 +17,19 @@ func handleSignals(signals chan os.Signal) {
 	os.Exit(1)
 }
 
-func serveHTTP(errs chan error, handler func(w http.ResponseWriter, r *http.Request)) {
+func serveHTTP(errs chan error, fn func(w http.ResponseWriter, r *http.Request)) {
 	log.Printf("Starting http webserver on port 8080\n")
-	if err := http.ListenAndServe(":8080", http.HandlerFunc(handler)); err != nil {
+
+	var handler http.Handler = nil
+	if fn != nil {
+		handler = http.HandlerFunc(fn)
+	}
+
+	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal(err)
 		errs <- err
 	}
+
 }
 
 func serveHTTPS(errs chan error, certFile string, keyFile string) {
