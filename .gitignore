@@ -15,3 +15,6 @@
 
 # Jetbrains files
 *.idea
+
+# Local backup files
+*.bak
