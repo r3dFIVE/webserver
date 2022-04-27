@@ -1,10 +1,11 @@
 html, body {
   height: 100%;
   margin: 0;
+  font-family: Helvetica, sans-serif;
   background-color: #ebeced;
 }
 
-a {
+.footer-content a {
   color: orange;
 }
 
@@ -21,19 +22,26 @@ a {
 .header {
   position: fixed;
   left: 0;
-  width: 100%;
   top: 0;
+  width: 100%;
   height: 50px;
   background-color: #2e200e;
-  color: white;
-  text-align: center;
+  color: #EADDCA;
+  font-weight: bold;
+}
+
+.header-left {
+  padding-top: 10px;
+  padding-left: 10px;
+  position: absolute;
+  font-size: 24pt;  
+  left: 0;  
 }
 
 .footer {
 	position: fixed;
   width: 100%;
   background-color: #2e200e;
-  color: white;
   text-align: center;
   height: 40px;
   bottom: 0;
@@ -44,15 +52,19 @@ a {
 .footer-content {
   display: inline-block;
   margin-top: 10px;
-  color: red;
+  color: #EADDCA;
 }
 
-#footer-right-img {
+.footer-separator {
+	color: red; 
+}
+
+.footer-right-img {
   position: absolute;
   right: 0;
 }
 
-#footer-left-img {
+.footer-left-img {
   position: absolute;
   left: 0;
 }
