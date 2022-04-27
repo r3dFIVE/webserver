@@ -4,6 +4,10 @@ html, body {
   background-color: #ebeced;
 }
 
+a {
+  color: orange;
+}
+
 .content {
 	min-height: 100%; 
 }
@@ -35,6 +39,12 @@ html, body {
   bottom: 0;
   margin-top; -40px;
   left; 0;
+}
+
+.footer-content {
+  display: inline-block;
+  margin-top: 10px;
+  color: red;
 }
 
 #footer-right-img {
