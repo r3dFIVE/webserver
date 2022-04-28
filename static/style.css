@@ -7,6 +7,24 @@ html, body {
 
 h2 {
   color: white;
+  text-shadow: 0 0 5px #C8C8C8;
+}
+
+h3, h4 {
+  color: SlateBlue;
+  text-shadow: 0 0 5px #5942c9;
+}
+
+.hostname {
+  color: MediumSeaGreen;
+}
+
+.terminal-text {
+  color: Lime;
+}
+
+.dir-path {
+  color: DodgerBlue;
 }
 
 .footer-content a {
@@ -63,35 +81,28 @@ h2 {
   left: 0;
 }
 
-#faux-terminal {
-  padding-top: 20px;
+.indent-left {
+  padding-left: 20px
 }
 
 /* Terminal Effect */
 
 /* Terminal Cursor Blink */
 
+#faux-terminal {
+  padding-top: 20px;
+}
+
 #cursor {
-  display: flex;
-  align-items: center;
-  gap: 2px;
+  background: Lime;
+  box-sizing: border-box;
+  -webkit-animation: blink 0.8s infinite;
 }
 
-#cursor::after {
-  content: "";
-  top: 2px;
-  margin:  0;
-  width: 8px;
-  height: 12pt;
-  background: #00b83d;
-  display: inline-block;
-  animation: cursor-blink 1.5s steps(2) infinite;
-}
-
-@keyframes cursor-blink {
-  0% {
-    opacity: 0;
-  }
+@-webkit-keyframes blink {
+  0% {background: #222}
+  50% {background: lime}
+  100% {background: #222}
 }
 
 /* Terminal Font and static scanlines */
@@ -102,8 +113,8 @@ h2 {
   background-image: radial-gradient(#042102, black 120%);
   margin: 0;
   overflow: hidden;
-  color: #00b83d;
-  font: 12pt Inconsolata, monospace;
+  color: Lime;
+  font: 11pt Inconsolata, monospace;
 }
 
 .content-inside {  

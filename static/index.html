@@ -15,21 +15,43 @@
         <div class="content-inside">
           <div id="faux-terminal">
             <div class="overlay">                
-              ross@rossmct.ca:~$ cat welcome.json
+              <span class="hostname">ross@rossmct</span><span class="terminal-text">:</span><span class="dir-path">~</span><span class="terminal-text">$ cat welcome.json
+              <br>
+              {
                 <br>
-                {
-                  <br>
-                  &emsp;message: 'Welcome to my "new" website. Very much a work in progress!'
-                  <br>
-                }
+                &emsp;message: 'Welcome to my "new" website. Very much a work in progress!'
                 <br>
-              <div id="cursor">ross@rossmct.ca:~$&nbsp;</div>              
+              }
+              <br></span>
+              <span class="hostname">ross@rossmct</span><span class="terminal-text">:</span><span class="dir-path">~</span><span class="terminal-text">$&nbsp;</span><span id="cursor">&nbsp;</span>              
               <h2>$About_Me </h2>
-              <p>Another line<br>describing myself.</p>
+              <div class="indent-left">
+                <p>Another line<br>describing myself.</p>
+                <p>A new paragraph.</p>  
+              </div>              
              	<h2>$Recent_Projects </h2>
+                <span class="hostname">ross@rossmct</span><span class="terminal-text">:</span><span class="dir-path">~/workspace</span><span class="terminal-text">$ ls</span>
+                <br>
+                  <span class="dir-path"><a class="dir-path" href="">QtBot</a>&emsp;<a class="dir-path" href="">pixark_server_manager</a>&emsp;<a class="dir-path" href="">webserver</a></span>
+                <br>
+                <span class="hostname">ross@rossmct</span><span class="terminal-text">:</span><span class="dir-path">~/workspace</span><span class="terminal-text">$&nbsp;</span><span id="cursor">&nbsp;</span> 
               <h3>QtBot - Extensible Discord Bot</h3>
-              <h4>Documentation</h4>
-              <p><a href="qtbot/index.html">QtBot Script Documentation</a></p>
+              <div class="indent-left">
+                An interactive Discord Chat Bot written from the ground-up using Qt5.
+                <!-- Add QtBot info -->
+                <h4>Documentation</h4>
+                <a href="qtbot/index.html">QtBot Script Documentation</a>
+              </div>            
+              <h3>Golang Webserver</h3>
+              <div class="indent-left">
+                A basic webserver written in Golang. Its what is serving this very site!
+                <!-- Add webserver info -->
+              </div>
+              <h3>Pixark Server Manager</h3>
+              <div class="indent-left">
+                A PowerShell implementation of a Pixark Server Mangager.
+                <!-- Add Pixark info -->
+              </div>              
             </div>
           </div>
         </div>
